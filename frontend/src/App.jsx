@@ -15,40 +15,52 @@ const INTEREST_ICONS = {
   Beaches: "🏖️",
 };
 
-const BR_TAG_REGEX = /(?:\\*<br\s*[\/\\]*>|&lt;br\s*[\/\\]*&gt;)/gi;
+export const BR_TAG_REGEX = /(?:\\*<[\/\\]*\s*br\s*[\/\\]*.*?>|&lt;[\/\\]*\s*br\s*[\/\\]*.*?&gt;)/gi;
 
-function renderWithBreaks(node) {
+export function renderWithBreaks(node, keyPrefix = "br") {
   if (typeof node === "string") {
     const parts = node.split(BR_TAG_REGEX);
     if (parts.length === 1) return node;
-    return parts.map((part, index) =>
-      index === 0 ? (
-        part
-      ) : (
-        <React.Fragment key={index}>
-          <br />
-          {part}
-        </React.Fragment>
-      )
-    );
+    const elements = [];
+    parts.forEach((part, index) => {
+      if (index > 0) {
+        elements.push(<br key={`${keyPrefix}-${index}`} />);
+      }
+      if (part) {
+        elements.push(part);
+      }
+    });
+    return elements;
   }
   if (React.isValidElement(node) && node.props && node.props.children) {
     return React.cloneElement(node, {
-      children: React.Children.map(node.props.children, renderWithBreaks),
+      children: Array.isArray(node.props.children)
+        ? node.props.children.flatMap((c, i) => renderWithBreaks(c, `${keyPrefix}-${i}`))
+        : renderWithBreaks(node.props.children, `${keyPrefix}-c`),
     });
   }
   if (Array.isArray(node)) {
-    return node.map(renderWithBreaks);
+    return node.flatMap((item, i) => renderWithBreaks(item, `${keyPrefix}-${i}`));
   }
   return node;
 }
 
-function cleanItineraryContent(text) {
+export function cleanItineraryContent(text) {
   if (!text) return "";
-  return text
-    .replace(/&nbsp;/g, " ")
-    .replace(/\u00a0/g, " ")
-    .replace(/\\+<br\s*[\/\\]*>/gi, "<br />");
+  const cleaned = text.replace(/&nbsp;/g, " ").replace(/\u00a0/g, " ");
+
+  // Outside of table rows, convert any break tags into standard Markdown line breaks
+  const lines = cleaned.split("\n");
+  const processed = lines.map((line) => {
+    // In table rows, keep tags for renderWithBreaks to convert into safe <br /> elements
+    if (line.includes("|")) {
+      return line;
+    }
+    // Outside tables, replace break tags with standard markdown line break
+    return line.replace(BR_TAG_REGEX, "  \n");
+  });
+
+  return processed.join("\n");
 }
 
 function App() {
@@ -148,11 +160,11 @@ function App() {
     h2: ({ children }) => <h2 style={md.h2}>{children}</h2>,
     h3: ({ children }) => <h3 style={md.h3}>{children}</h3>,
     // Paragraph
-    p: ({ children }) => <p style={md.p}>{renderWithBreaks(children)}</p>,
+    p: ({ children }) => <p style={md.p}>{renderWithBreaks(children, "p")}</p>,
     // Lists
     ul: ({ children }) => <ul style={md.ul}>{children}</ul>,
     ol: ({ children }) => <ol style={md.ol}>{children}</ol>,
-    li: ({ children }) => <li style={md.li}>{renderWithBreaks(children)}</li>,
+    li: ({ children }) => <li style={md.li}>{renderWithBreaks(children, "li")}</li>,
     // Blockquote
     blockquote: ({ children }) => (
       <blockquote style={md.blockquote}>{children}</blockquote>
@@ -168,8 +180,8 @@ function App() {
       </div>
     ),
     thead: ({ children }) => <thead>{children}</thead>,
-    th: ({ children }) => <th style={md.th}>{renderWithBreaks(children)}</th>,
-    td: ({ children }) => <td style={md.td}>{renderWithBreaks(children)}</td>,
+    th: ({ children }) => <th style={md.th}>{renderWithBreaks(children, "th")}</th>,
+    td: ({ children }) => <td style={md.td}>{renderWithBreaks(children, "td")}</td>,
     tr: ({ children }) => <tr style={md.tr}>{children}</tr>,
   };
 
