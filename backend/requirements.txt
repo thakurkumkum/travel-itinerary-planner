@@ -1,0 +1,25 @@
+# ─── Web framework ──────────────────────────────────────────
+# fastapi 0.115.x: supports Python 3.13, requires pydantic>=2.9
+fastapi==0.115.12
+uvicorn[standard]==0.34.3
+
+# ─── Data validation ────────────────────────────────────────
+# pydantic 2.10.x: first series with stable Python 3.13 wheels
+# pydantic-core 2.27.x ships prebuilt wheels for cp313 — no Rust compile needed
+pydantic==2.10.6
+# pydantic-settings 2.7.x: requires pydantic>=2.7, supports Python >=3.9
+pydantic-settings==2.7.1
+
+# ─── Supabase client ────────────────────────────────────────
+# supabase 2.10.0: loosened httpx constraint to >=0.26,<0.29
+supabase==2.10.0
+
+# ─── Groq AI client ─────────────────────────────────────────
+# groq 0.11.0: supports Python 3.13, httpx>=0.23.0,<1
+groq==0.11.0
+
+# ─── Utilities ──────────────────────────────────────────────
+python-dotenv==1.0.1
+# httpx 0.27.2: satisfies supabase (>=0.26,<0.29) AND groq (>=0.23,<1)
+# Using 0.27.x instead of 0.28.x for maximum sub-dependency compatibility
+httpx==0.27.2
