@@ -2,10 +2,11 @@
 # fastapi 0.115.x: supports Python 3.13, requires pydantic>=2.9
 fastapi==0.115.12
 uvicorn[standard]==0.34.3
+gunicorn==23.0.0
 
 # ─── Data validation ────────────────────────────────────────
 # pydantic 2.10.x: first series with stable Python 3.13 wheels
-# pydantic-core 2.27.x ships prebuilt wheels for cp313 — no Rust compile needed
+# pydantic-core 2.27.x ships prebuilt wheels for cp313 - no Rust compile needed
 pydantic==2.10.6
 # pydantic-settings 2.7.x: requires pydantic>=2.7, supports Python >=3.9
 pydantic-settings==2.7.1
