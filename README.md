@@ -1,6 +1,6 @@
 <div align="center">
 
-# ✈️ Trip Genius AI
+# ✈️ VoyagePlan | AI TRAVEL PLANNER
 
 ### Plan smarter. Explore more. Travel better.
 
