@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -17,12 +18,21 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# Parse allowed origins for CORS (supports comma-separated origins from environment)
+allowed_origins_env = os.getenv("ALLOWED_ORIGINS") or os.getenv("FRONTEND_URL") or ""
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+if allowed_origins_env:
+    for o in allowed_origins_env.split(","):
+        cleaned = o.strip().rstrip("/")
+        if cleaned and cleaned not in origins:
+            origins.append(cleaned)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
