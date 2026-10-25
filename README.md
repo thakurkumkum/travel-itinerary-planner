@@ -1,101 +1,144 @@
-# Personalized Travel Itinerary Planner
+<div align="center">
 
-> A college project that uses AI (Groq) to generate personalized travel itineraries.  
-> Users sign in via Supabase Auth, enter their travel preferences, and receive a detailed day-by-day plan.
+# ✈️ Trip Genius AI
+
+### Plan smarter. Explore more. Travel better.
+
+**An AI-powered travel itinerary planner personalized to your preferences.**
+
+[🌐 Live Demo](https://travel-itinerary-planner-0023-b9jioymcx-kumkum18.vercel.app/) ·
+[💻 GitHub Repository](https://github.com/thakurkumkum/travel-itinerary-planner) ·
+[🩺 API Health](https://travel-itinerary-planner-1ysc.onrender.com/health)
+
+<img alt="React" src="https://img.shields.io/badge/React-UI-61DAFB?logo=react&logoColor=black">
+<img alt="Vite" src="https://img.shields.io/badge/Vite-Build-646CFF?logo=vite&logoColor=white">
+<img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-Backend-009688?logo=fastapi&logoColor=white">
+<img alt="Supabase" src="https://img.shields.io/badge/Supabase-Auth%20%26%20Data-3FCF8E?logo=supabase&logoColor=white">
+<img alt="Vercel" src="https://img.shields.io/badge/Frontend-Vercel-black?logo=vercel">
+<img alt="Render" src="https://img.shields.io/badge/Backend-Render-46E3B7?logo=render&logoColor=black">
+
+</div>
 
 ---
 
-## Tech Stack
+## 🌍 Overview
 
-| Layer        | Technology                        |
-|--------------|-----------------------------------|
-| Frontend     | React 18 + Vite + JavaScript      |
-| Backend      | Python 3.11 + FastAPI             |
-| Database     | Supabase (PostgreSQL)             |
-| Auth         | Supabase Auth                     |
-| AI           | Groq (LLM inference)              |
-| FE Deploy    | Vercel                            |
-| BE Deploy    | Render                            |
+**Trip Genius AI** helps travelers create personalized itineraries using their **destination, travel dates, interests, budget, and preferred pace**. Users can generate a plan, save trips, revisit them in **My Trips**, and edit saved preferences.
 
----
+## ✨ Key Features
 
-## Project Structure
+- 🧭 **Personalized planning** based on destination and travel preferences.
+- 🤖 **AI-assisted itinerary generation** through the backend integration.
+- 🔐 **Authentication** with Supabase Auth.
+- 💾 **Save and revisit trips** in My Trips.
+- ✏️ **Edit saved preferences** without starting from scratch.
+- 🔄 **Persistent saved trips** across browser refreshes, as reported in production tests.
 
+## 🛠️ Tech Stack
+
+| Technology | Role |
+|---|---|
+| React + Vite | Frontend and build tooling |
+| Python + FastAPI | Backend API and request handling |
+| Pydantic | Input validation |
+| Groq | AI inference integration |
+| Supabase | Authentication and PostgreSQL data services |
+| Vercel + Render | Frontend and backend hosting |
+
+## 🔄 How It Works
+
+1. **Enter preferences** — destination, dates, interests, budget, and pace.
+2. **Generate** — the frontend sends the request to FastAPI.
+3. **Personalize** — the backend validates inputs and calls the configured AI integration.
+4. **Save** — review the itinerary and save the trip.
+5. **Revisit** — open My Trips, edit preferences, and return to saved plans.
+
+## 🏗️ Architecture
+
+```text
+Traveler
+   ↓
+React + Vite Frontend
+   ↓ HTTP API
+FastAPI Backend ─────→ Groq AI
+   │
+   └───────────────→ Supabase Auth / Data
 ```
-personalized-travel-itinerary-planner/
-├── frontend/           # React + Vite app
-│   ├── src/
-│   │   ├── components/ # Reusable UI components
-│   │   ├── pages/      # Page-level components (routes)
-│   │   └── services/   # API calls and Supabase client
-│   ├── .env.example    # Required environment variables
-│   └── package.json
-├── backend/            # FastAPI app
-│   ├── app/
-│   │   ├── routes/     # API endpoint routers
-│   │   ├── schemas/    # Pydantic request/response models
-│   │   ├── services/   # Business logic (Groq, Supabase)
-│   │   └── prompts/    # AI prompt templates
-│   ├── requirements.txt
-│   └── .env.example    # Required environment variables
-├── database/
-│   └── schema.sql      # Supabase SQL schema + RLS policies
-├── .gitignore
-├── README.md
-├── ARCHITECTURE.md     # System design overview
-└── DEPLOYMENT.md       # Step-by-step deployment guide
-```
 
----
+## 🚀 Run Locally
 
-## Getting Started (Local Development)
+**Prerequisites:** Git, Node.js/npm, Python, and the required Supabase and Groq configuration.
 
-### 1. Clone the repository
 ```bash
-git clone <your-repo-url>
-cd personalized-travel-itinerary-planner
+git clone https://github.com/thakurkumkum/travel-itinerary-planner.git
+cd travel-itinerary-planner
 ```
 
-### 2. Set up the backend
-```bash
-cd backend
-python -m venv venv
-# Windows:
-venv\Scripts\activate
-# macOS/Linux:
-source venv/bin/activate
+**Frontend** — in one terminal:
 
-pip install -r requirements.txt
-cp .env.example .env   # Fill in your real values
-uvicorn app.main:app --reload
-```
-
-### 3. Set up the frontend
 ```bash
 cd frontend
 npm install
-cp .env.example .env.local   # Fill in your real values
 npm run dev
 ```
 
-### 4. Set up the database
-- Create a project on [Supabase](https://supabase.com).
-- Open the **SQL Editor** and run `database/schema.sql`.
+**Backend** — in a separate terminal:
+
+```bash
+cd backend
+python -m venv .venv
+# Activate the virtual environment
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+## 🔑 Environment & Security
+
+Configure the environment variables required by your code.
+
+**Frontend examples:**
+
+```env
+VITE_API_BASE_URL=http://127.0.0.1:8000
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_public_anon_key
+```
+
+Configure your **Groq API key** and required Supabase settings on the backend.
+
+> **Security:** Never commit `.env` files or secrets. Keep Groq credentials and Supabase service-role keys on the server, and verify access controls for saved trips.
+
+## ☁️ Live Deployment
+
+| Service | Link |
+|---|---|
+| **Live application** | [Open Trip Genius AI](https://travel-itinerary-planner-0023-b9jioymcx-kumkum18.vercel.app/) |
+| **Backend health** | [Check API status](https://travel-itinerary-planner-1ysc.onrender.com/health) |
+| **Source code** | [GitHub repository](https://github.com/thakurkumkum/travel-itinerary-planner) |
+
+## ✅ Production Smoke Tests
+
+The project owner reports that these tests passed:
+
+- Sign-up and sign-in
+- Itinerary generation
+- Saving and listing trips
+- Loading saved preferences for editing
+- Persistence after browser refresh
+- No critical browser-console errors during the reported test session
+
+## 🚀 Future Improvements
+
+Interactive maps, PDF itinerary export, richer budget summaries, live travel information, improved AI error handling, and collaborative planning.
+
+## ⚠️ Note
+
+AI-generated travel suggestions may be incomplete or outdated. Verify current prices, opening hours, transportation details, and safety information before traveling. Trip Genius AI does not guarantee live availability or booking prices.
 
 ---
 
-## Environment Variables
+<div align="center">
 
-Copy the `.env.example` files and fill in your credentials.  
-**Never commit real `.env` files to version control.**
+**Trip Genius AI** · *Plan smarter. Explore more. Travel better. ✈️*
 
-| File                    | Key variables                                      |
-|-------------------------|----------------------------------------------------|
-| `frontend/.env.example` | `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_API_BASE_URL` |
-| `backend/.env.example`  | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `GROQ_API_KEY` |
-
----
-
-## License
-
-MIT — free to use for educational purposes.
+</div>
